@@ -37,6 +37,8 @@ We'll adopt an end-to-end method where every team member will be involved in all
 
 - **Connect FrontEnd to BackEnd**: Everyone
 
-### April 4th - April 5th: Revision of Code and Fix Bugs
+### Week 4: April 4th - April 5th
+
+- **Revision of Code and Fix Bugs**: Everyone
 
 
