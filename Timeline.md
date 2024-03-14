@@ -11,7 +11,7 @@ We'll adopt an end-to-end method where every team member will be involved in all
 
 - **Setting up Oracle**: Everyone
 
-- **Finish Creating Tables and working INSERT Statements**: Aaditya Desai
+- **Finish working CREATE TABLE and INSERT Statements**: Aaditya Desai
 
 ### Week 2: March 21th - March 27th
 
