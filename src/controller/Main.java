@@ -119,7 +119,7 @@ public class Main implements LoginWindowDelegate, UserLoginDelegate, UserPrefere
 
     @Override
     public void deleteUser(String userID) {
-
+        dbHandler.deleteUser(userID);
     }
 
     @Override

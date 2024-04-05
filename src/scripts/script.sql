@@ -278,3 +278,4 @@ INSERT INTO Seeker (SeekerID, SeekingType) VALUES
     ('S987321',  'Off Campus');
 INSERT INTO Seeker (SeekerID, SeekingType) VALUES
     ('S159753',  'Off Campus');
+

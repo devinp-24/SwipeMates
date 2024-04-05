@@ -374,4 +374,27 @@ public class DatabaseConnectionHandler {
 			System.out.println("No updates to append for UserID: " + userID);
 		}
 	}
+
+	public void deleteUser(String userID) {
+		String deleteSql = "DELETE FROM Users WHERE UserID = ?";
+		try (PreparedStatement ps = connection.prepareStatement(deleteSql)) {
+			ps.setString(1, userID);
+			ps.executeUpdate();
+			appendDeleteUser(userID);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void appendDeleteUser(String userID) {
+		String sqlStatement = String.format("DELETE FROM Users WHERE UserID = '%s';\n", userID);
+		try (FileWriter fw = new FileWriter("src/scripts/script.sql", true);
+			 BufferedWriter bw = new BufferedWriter(fw);
+			 PrintWriter out = new PrintWriter(bw)) {
+
+			out.println(sqlStatement);
+		} catch (IOException e) {
+			System.out.println("EXCEPTION: " + e.getMessage());
+		}
+	}
 }

@@ -66,7 +66,10 @@ public class Dashboard extends JFrame {
             JPanel panel;
             if ("Update".equals(label)) {
                 panel = createUpdatePanel();
-            } else {
+            } else if ("Delete".equals(label)) {
+                panel = createDeletePanel();
+            }
+            else {
                 panel = new JPanel();
                 panel.add(new JLabel(label + " Content"));
             }
@@ -124,6 +127,43 @@ public class Dashboard extends JFrame {
 
         return updatePanel;
     }
+
+    private JPanel createDeletePanel() {
+        JPanel deletePanel = new JPanel();
+        deletePanel.setLayout(new BoxLayout(deletePanel, BoxLayout.Y_AXIS));
+
+        // Adding a label with a warning message
+        JLabel warningLabel = new JLabel("<html>Delete Account: This will permanently delete your account including socials, preferences, and requirements.</html>");
+        warningLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align the label
+
+        // Adding a button that will trigger the account deletion
+        JButton deleteButton = new JButton("Delete User Account");
+        deleteButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align the button
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int response = JOptionPane.showConfirmDialog(
+                        null,
+                        "Are you sure you want to permanently delete your account?",
+                        "Confirm Deletion",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+                if (response == JOptionPane.YES_OPTION) {
+                    delegate.deleteUser(username);
+                    System.exit(-1);
+                }
+            }
+        });
+
+        deletePanel.add(Box.createRigidArea(new Dimension(0, 50))); // Spacer for aesthetics
+        deletePanel.add(warningLabel);
+        deletePanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer between label and button
+        deletePanel.add(deleteButton);
+
+        return deletePanel;
+    }
+
 
     public void showFrame(DashBoardDelegate delegate, String username) {
         this.delegate = delegate;
