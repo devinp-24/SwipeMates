@@ -27,6 +27,7 @@ public class UserLogin extends JFrame {
     private JComboBox<String> seekerTypeComboBox;
     private JComboBox<String> listerTypeComboBox;
     private JComboBox<String> residenceComboBox;
+    private UserPreferencesPage userPreferencesPage;
 
     public UserLogin() {
         super("User Login/Sign Up");
@@ -184,6 +185,8 @@ public class UserLogin extends JFrame {
                     listerModel lister = new listerModel(username, listerType, residence);
                     delegate.insertLister(lister);
                 }
+
+                delegate.onSignUpSuccess(username);
             }
         });
 
