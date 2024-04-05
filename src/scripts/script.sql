@@ -1,5 +1,8 @@
 DROP TABLE Lister;
 DROP TABLE Seeker;
+DROP TABLE Preferences;
+DROP TABLE Requirements;
+DROP TABLE SocialPageHas;
 DROP TABLE Users;
 CREATE TABLE Users (
                        UserID VARCHAR(16) PRIMARY KEY,
@@ -8,6 +11,8 @@ CREATE TABLE Users (
                        Bio VARCHAR(100),
                        Age INTEGER NOT NULL
 );
+
+
 
 INSERT INTO Users (UserID, Name, Gender, Bio, Age) VALUES
     ('L123456', 'Devin Proothi', 'Male', 'UBC, Year 3, CS.', 24);
@@ -34,10 +39,97 @@ INSERT INTO Users (UserID, Name, Gender, Bio, Age) VALUES ('S654987', 'Priya Sin
 INSERT INTO Users (UserID, Name, Gender, Bio, Age) VALUES ('S987321', 'Ethan Wong', 'Male', 'UBC. Year 2. Mathematics.', 20);
 INSERT INTO Users (UserID, Name, Gender, Bio, Age) VALUES ('S159753', 'Sophia Loren', 'Female', 'UBC. Year 3. Fine Arts.', 21);
 
+CREATE TABLE Preferences (
+                             PreferencesID VARCHAR(16),
+                             PreferredGender VARCHAR(10),
+                             PreferredAgeRange VARCHAR(20),
+                             PreferredLifestyle VARCHAR(255),
+                             PreferredLocation VARCHAR(255),
+                             FOREIGN KEY (PreferencesID) REFERENCES Users(UserID)
+);
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('L123456', 'Female', '26-30', 'Active', 'Off Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('S123456', 'Female', '31-40', 'Quiet', 'On Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('L101010', 'Other', '18-25', 'Active', NULL);
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('S101010', 'Male', '31-40', 'Quiet', 'On Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('S987654', 'Other', NULL, 'Active', 'Off Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('L765432', 'Female', '41-50', 'Quiet', 'On Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('L345678', 'Male', '18-25', 'Active', 'Off Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('L012120', 'Other', '31-40', 'Quiet', 'On Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('S765432', 'Female', '26-30', NULL, 'Off Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('S012120', 'Male', '41-50', 'Quiet', 'On Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('L012128', 'Other', '18-25', 'Active', 'Off Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('S012129', NULL, '31-40', 'Quiet', 'On Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('L876543', 'Male', '26-30', 'Active', 'Off Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('L123789', 'Other', '41-50', 'Quiet', 'On Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('L456123', 'Female', '18-25', 'Active', 'Off Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('L789456', 'Male', '31-40', 'Quiet', 'On Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('S321654', 'Other', '26-30', 'Active', 'Off Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('S654987', 'Female', '41-50', 'Quiet', 'On Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('S987321', 'Male', '18-25', 'Active', 'Off Campus');
+INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES ('S159753', NULL, NULL, NULL, 'On Campus');
+
+CREATE TABLE Requirements (
+                              RequirementID VARCHAR(16),
+                              RequiredGender VARCHAR(10),
+                              RequiredAgeRange VARCHAR(20),
+                              RequiredLifestyle VARCHAR(255),
+                              RequiredLocation VARCHAR(255),
+                              FOREIGN KEY (RequirementID) REFERENCES Users(UserID)
+);
+
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('L123456', 'Female', '26-30', 'Active', 'Off Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('S123456', 'Female', '31-40', 'Quiet', 'On Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('L101010', 'Other', '18-25', 'Active', 'Off Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('S101010', 'Male', '31-40', 'Quiet', 'On Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('S987654', 'Other', '26-30', 'Active', 'Off Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('L765432', 'Female', '41-50', 'Quiet', 'On Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('L345678', 'Male', '18-25', 'Active', 'Off Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('L012120', 'Other', '31-40', 'Quiet', 'On Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('S765432', 'Female', '26-30', 'Active', 'Off Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('S012120', 'Male', '41-50', 'Quiet', 'On Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('L012128', 'Other', '18-25', 'Active', 'Off Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('S012129', 'Female', '31-40', 'Quiet', 'On Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('L876543', 'Male', '26-30', 'Active', 'Off Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('L123789', NULL, '41-50', 'Quiet', 'On Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('L456123', 'Female', '18-25', 'Active', 'Off Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('L789456', 'Male', '31-40', NULL, 'On Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('S321654', 'Other', '26-30', 'Active', 'Off Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('S654987', 'Female', '41-50', 'Quiet', NULL);
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('S987321', 'Male', '18-25', 'Active', 'Off Campus');
+INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES ('S159753', NULL, '31-40', NULL, NULL);
+
+CREATE TABLE SocialPageHas (
+                               EmailID VARCHAR(255) PRIMARY KEY,
+                               UserID VARCHAR(16) NOT NULL,
+                               PhoneNumber VARCHAR(15) UNIQUE,
+                               InstagramUsername VARCHAR(30) UNIQUE,
+                               FOREIGN KEY (UserID) REFERENCES Users(UserID)
+                                   ON DELETE CASCADE
+);
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('devin.proothi@gmail.com', 'L123456', '7780000001', 'devinproothi');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('aryaan.habib@gmail.com', 'S123456', '7780000002', 'aryaanhabib');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('nabeel.ali@gmail.com', 'L101010', '7780000003', 'nabeelali');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('kartikeya.chaturvedi@gmail.com', 'S101010', '7780000004', 'kartikeyachaturvedi');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('aaditya.desai@gmail.com', 'S987654', '7780000005', 'aadityadesai');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('sid.jain@gmail.com', 'L765432', '7780000006', 'sidjain');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('rishav.ubc@gmail.com', 'L345678', '7780000007', 'rishavubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('aneyeant@gmail.com', 'L012120', '7780000008', 'aneyeant');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('anmol.ubc@gmail.com', 'S765432', '7780000009', 'anmolubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('jaimin@gmail.com', 'S012120', '7780000010', 'jaiminubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('jai@gmail.com', 'L012128', '7780000011', 'jaiubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('man@gmail.com', 'S012129', '7780000012', 'manubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('alex.smith@gmail.com', 'L876543', '7780000013', 'alexsmithubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('jessica.jones@gmail.com', 'L123789', '7780000014', 'jessicajonesubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('michael.chen@gmail.com', 'L456123', '7780000015', 'michaelchenubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('laura.gibson@gmail.com', 'L789456', '7780000016', 'lauragibsonubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('omar.farooq@gmail.com', 'S321654', '7780000017', 'omarfarooqubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('priya.singh@gmail.com', 'S654987', '7780000018', 'priyasinghubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('ethan.wong@gmail.com', 'S987321', '7780000019', 'ethanwongubc');
+INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('sophia.loren@gmail.com', 'S159753', '7780000020', 'sophialorenubc');
+
 DROP TABLE Res;
 DROP TABLE Building;
 DROP TABLE Floors;
-
 CREATE TABLE Floors (
                         BuildingName VARCHAR(255) PRIMARY KEY,
                         NumberOfFloors INT NOT NULL
