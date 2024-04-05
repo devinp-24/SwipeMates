@@ -2,11 +2,15 @@ package controller;
 
 import database.DatabaseConnectionHandler;
 import delegates.LoginWindowDelegate;
+import delegates.UserLoginDelegate;
+import model.userModel;
 import ui.LoginWindow;
+import ui.UserLogin;
 
-public class Main implements LoginWindowDelegate {
+public class Main implements LoginWindowDelegate, UserLoginDelegate {
     private DatabaseConnectionHandler dbHandler = null;
     private LoginWindow loginWindow = null;
+    private UserLogin userLogin = null;
 
 
 
@@ -19,6 +23,7 @@ public class Main implements LoginWindowDelegate {
         loginWindow = new LoginWindow();
         loginWindow.showFrame(this);
         dbHandler = new DatabaseConnectionHandler();
+        userLogin = new UserLogin();
     }
 
     @Override
@@ -28,6 +33,8 @@ public class Main implements LoginWindowDelegate {
         if (didConnect) {
             // Once connected, remove login window and start text transaction flow
             loginWindow.dispose();
+            userLogin.showFrame(this);
+
 
         } else {
             loginWindow.handleLoginFailed();
@@ -38,5 +45,15 @@ public class Main implements LoginWindowDelegate {
                 System.exit(-1);
             }
         }
+    }
+
+    @Override
+    public void insertUser(userModel user) {
+        dbHandler.insertUser(user);
+    }
+
+    @Override
+    public boolean checkUserId(String userIdInput) {
+        return dbHandler.checkUserId(userIdInput);
     }
 }
