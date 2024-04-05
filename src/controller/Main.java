@@ -3,15 +3,15 @@ package controller;
 import database.DatabaseConnectionHandler;
 import delegates.LoginWindowDelegate;
 import delegates.UserLoginDelegate;
-import model.listerModel;
-import model.seekerModel;
-import model.userModel;
+import delegates.UserPreferencesDelegate;
+import model.*;
 import ui.LoginWindow;
 import ui.UserLogin;
+import ui.UserPreferencesPage;
 
 import java.util.List;
 
-public class Main implements LoginWindowDelegate, UserLoginDelegate {
+public class Main implements LoginWindowDelegate, UserLoginDelegate, UserPreferencesDelegate {
     private DatabaseConnectionHandler dbHandler = null;
     private LoginWindow loginWindow = null;
     private UserLogin userLogin = null;
@@ -76,5 +76,25 @@ public class Main implements LoginWindowDelegate, UserLoginDelegate {
         dbHandler.insertSeeker(seeker);
     }
 
+    @Override
+    public void onSignUpSuccess(String username) {
+        userLogin.dispose();
+        UserPreferencesPage userPreferencesPage = new UserPreferencesPage();
+        userPreferencesPage.showFrame(this, username);
+    }
 
+    @Override
+    public void insertPreference(preferenceModel pref) {
+        dbHandler.insertPreference(pref);
+    }
+
+    @Override
+    public void insertRequirement(requirementModel req) {
+        dbHandler.insertRequirement(req);
+    }
+
+    @Override
+    public void insertSocial(socialModel social) {
+        dbHandler.insertSocial(social);
+    }
 }
