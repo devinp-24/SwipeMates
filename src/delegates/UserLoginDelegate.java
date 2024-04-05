@@ -12,4 +12,5 @@ public interface UserLoginDelegate {
     List<String> getResIdsName();
     void insertLister(listerModel lister);
     void insertSeeker(seekerModel seeker);
+    void onSignUpSuccess(String username);
 }
