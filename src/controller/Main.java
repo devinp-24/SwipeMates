@@ -3,9 +3,13 @@ package controller;
 import database.DatabaseConnectionHandler;
 import delegates.LoginWindowDelegate;
 import delegates.UserLoginDelegate;
+import model.listerModel;
+import model.seekerModel;
 import model.userModel;
 import ui.LoginWindow;
 import ui.UserLogin;
+
+import java.util.List;
 
 public class Main implements LoginWindowDelegate, UserLoginDelegate {
     private DatabaseConnectionHandler dbHandler = null;
@@ -56,4 +60,21 @@ public class Main implements LoginWindowDelegate, UserLoginDelegate {
     public boolean checkUserId(String userIdInput) {
         return dbHandler.checkUserId(userIdInput);
     }
+
+    @Override
+    public List<String> getResIdsName() {
+        return dbHandler.getResIdsName();
+    }
+
+    @Override
+    public void insertLister(listerModel lister) {
+        dbHandler.insertLister(lister);
+    }
+
+    @Override
+    public void insertSeeker(seekerModel seeker) {
+        dbHandler.insertSeeker(seeker);
+    }
+
+
 }
