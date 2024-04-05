@@ -23,7 +23,7 @@ public class LoginWindow extends JFrame implements ActionListener {
     private LoginWindowDelegate delegate;
 
     public LoginWindow() {
-        super("User Login");
+        super("Oracle Login");
     }
 
     public void showFrame(LoginWindowDelegate delegate) {
