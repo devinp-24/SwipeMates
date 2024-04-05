@@ -1,10 +1,14 @@
 package database;
 
+import model.listerModel;
+import model.seekerModel;
 import model.userModel;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseConnectionHandler {
 	private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
@@ -145,5 +149,92 @@ public class DatabaseConnectionHandler {
 			System.out.println("[EXCEPTION] " + e.getMessage());
 		}
 		return userIdExists;
+	}
+
+	public List<String> getResIds() {
+		List<String> resIds = new ArrayList<>();
+		String query = "SELECT ResID FROM Res";
+
+		try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+			while (rs.next()) {
+				resIds.add(rs.getString("ResID"));
+			}
+		} catch (SQLException e) {
+			System.out.println("[EXCEPTION] " + e.getMessage());
+		}
+		return resIds;
+	}
+
+	public List<String> getResName() {
+		List<String> resName = new ArrayList<>();
+		String query = "SELECT BuildingName FROM Building";
+
+		try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+			while (rs.next()) {
+				resName.add(rs.getString("BuildingName"));
+			}
+		} catch (SQLException e) {
+			System.out.println("[EXCEPTION] " + e.getMessage());
+		}
+		return resName;
+	}
+
+	public List<String> getResIdsName() {
+		List<String> id = getResIds();
+		List<String> name = getResName();
+		List<String> idName = new ArrayList<>();
+		for (int i = 0; i < id.size(); i ++) {
+			idName.add(id.get(i) + " (" + name.get(i) + ")");
+		}
+		return idName;
+	}
+
+	public void insertLister(listerModel lister) {
+		String insertSql = "INSERT INTO Lister(ListerID, ResID, ListingType) VALUES (?, ?, ?)";
+		try (PreparedStatement ps = connection.prepareStatement(insertSql)) {
+			ps.setString(1, lister.getListerID());
+			ps.setString(2, lister.getResID());
+			ps.setString(3, lister.getListingType());
+			ps.executeUpdate();
+			appendLister(lister);
+			System.out.println(getResIds());
+		} catch (SQLException e) {
+			System.out.println("[EXCEPTION] " + e.getMessage());
+		}
+	}
+
+	private void appendLister(listerModel lister) {
+		String sqlStatement = String.format("INSERT INTO Lister VALUES ('%s', '%s', '%s');\n",
+				lister.getListerID(), lister.getResID(), lister.getListingType());
+		try(FileWriter fw = new FileWriter("src/scripts/script.sql", true);
+			PrintWriter out = new PrintWriter(fw)) {
+			out.println(sqlStatement);
+		} catch (IOException e) {
+			System.out.println("EXCEPTION + " + e.getMessage());
+		}
+	}
+
+	public void insertSeeker(seekerModel seeker) {
+		String insertSql = "INSERT INTO Seeker (SeekerID, SeekingType) VALUES (?, ?)";
+		try (PreparedStatement ps = connection.prepareStatement(insertSql)) {
+			ps.setString(1, seeker.getSeekerID());
+			ps.setString(2, seeker.getSeekingType());
+			ps.executeUpdate();
+			appendSeeker(seeker);
+			System.out.println(getResIds());
+		} catch (SQLException e) {
+			System.out.println("[EXCEPTION] " + e.getMessage());
+		}
+	}
+
+	private void appendSeeker(seekerModel seeker) {
+		String sqlStatement = String.format("INSERT INTO Seeker VALUES ('%s', '%s');\n",
+				seeker.getSeekerID(), seeker.getSeekingType());
+		try(FileWriter fw = new FileWriter("src/scripts/script.sql", true);
+			PrintWriter out = new PrintWriter(fw)) {
+			out.println(sqlStatement);
+		} catch (IOException e) {
+			System.out.println("EXCEPTION + " + e.getMessage());
+		}
 	}
 }
