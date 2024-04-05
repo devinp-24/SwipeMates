@@ -1,11 +1,14 @@
 package ui;
 
 import delegates.UserLoginDelegate;
+import model.listerModel;
+import model.seekerModel;
 import model.userModel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Objects;
 
 public class UserLogin extends JFrame {
 
@@ -17,7 +20,13 @@ public class UserLogin extends JFrame {
     private JTextField ageField;
     private JComboBox<String> genderComboBox;
     private JTextArea bioText;
+    private JComboBox<String> userTypeComboBox;
     private JButton signupButton;
+    private JPanel cards;
+    private CardLayout cardLayout;
+    private JComboBox<String> seekerTypeComboBox;
+    private JComboBox<String> listerTypeComboBox;
+    private JComboBox<String> residenceComboBox;
 
     public UserLogin() {
         super("User Login/Sign Up");
@@ -46,6 +55,13 @@ public class UserLogin extends JFrame {
         ageField = new JTextField(20);
         genderComboBox = new JComboBox<>(new String[]{"Gender", "Male", "Female", "Other"});
         bioText = new JTextArea(5, 20);
+        userTypeComboBox = new JComboBox<>(new String[]{"Select User Type", "Seeker", "Lister"});
+        userTypeComboBox.setSelectedItem("Seeker");
+        cardLayout = new CardLayout();
+        cards = new JPanel(cardLayout);
+        seekerTypeComboBox = new JComboBox<>(new String[]{"On Campus", "Off Campus"});
+        listerTypeComboBox = new JComboBox<>(new String[]{"On Campus", "Off Campus"});
+        residenceComboBox = new JComboBox<>(new String[]{"Select Residence"});
         signupButton = new JButton("Sign Up");
     }
 
@@ -80,6 +96,8 @@ public class UserLogin extends JFrame {
     }
 
     private void addSignupSection() {
+        String[] residences = delegate.getResIdsName().toArray(new String[0]);
+        residenceComboBox = new JComboBox<>(residences);
         JPanel signupPanel = new JPanel();
         signupPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -102,6 +120,38 @@ public class UserLogin extends JFrame {
         bioText.setWrapStyleWord(true);
         JScrollPane bioScrollPane = new JScrollPane(bioText);
         signupPanel.add(bioScrollPane, gbc);
+        JPanel seekerPanel = new JPanel(new FlowLayout());
+        seekerPanel.add(new JLabel("Seeker Type: "));
+        seekerPanel.add(seekerTypeComboBox);
+        JPanel listerPanel = new JPanel(new FlowLayout());
+        listerPanel.add(new JLabel("Lister Type: "));
+        listerPanel.add(listerTypeComboBox);
+        listerPanel.add(new JLabel("Residence: "));
+        listerPanel.add(residenceComboBox);
+
+// Add more components specific to Lister
+        cards.add(seekerPanel, "Seeker");
+        cards.add(listerPanel, "Lister");
+        signupPanel.add(new JLabel("User Type: "), gbc);
+        signupPanel.add(userTypeComboBox, gbc);
+        signupPanel.add(cards, gbc);
+        userTypeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String userType = (String) userTypeComboBox.getSelectedItem();
+                switch (userType) {
+                    case "Seeker":
+                        cardLayout.show(cards, "Seeker");
+                        break;
+                    case "Lister":
+                        cardLayout.show(cards, "Lister");
+                        break;
+                    default:
+                        cardLayout.show(cards, "Seeker");
+                        break;
+                }
+            }
+        });
         signupPanel.add(signupButton, gbc);
 
         signupButton.addActionListener(new ActionListener() {
@@ -123,6 +173,17 @@ public class UserLogin extends JFrame {
                 userModel user = new userModel(username, name, gender, bio, age);
                 System.out.println(user.getUserID() + user.getAge() + user.getBio() + user.getName() + user.getGender());
                 delegate.insertUser(user);
+
+                if (Objects.equals((String) userTypeComboBox.getSelectedItem(), "Seeker")) {
+                    String seekerType = (String) seekerTypeComboBox.getSelectedItem();
+                    seekerModel seeker = new seekerModel(username, seekerType);
+                    delegate.insertSeeker(seeker);
+                } else if (Objects.equals((String) userTypeComboBox.getSelectedItem(), "Lister")) {
+                    String listerType = (String) listerTypeComboBox.getSelectedItem();
+                    String residence = ((String) residenceComboBox.getSelectedItem()).substring(0, 5);
+                    listerModel lister = new listerModel(username, listerType, residence);
+                    delegate.insertLister(lister);
+                }
             }
         });
 
