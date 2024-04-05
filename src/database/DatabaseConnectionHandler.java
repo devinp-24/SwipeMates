@@ -1,9 +1,6 @@
 package database;
 
-import model.listerModel;
-import model.seekerModel;
-import model.userModel;
-
+import model.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
@@ -230,6 +227,86 @@ public class DatabaseConnectionHandler {
 	private void appendSeeker(seekerModel seeker) {
 		String sqlStatement = String.format("INSERT INTO Seeker VALUES ('%s', '%s');\n",
 				seeker.getSeekerID(), seeker.getSeekingType());
+		try(FileWriter fw = new FileWriter("src/scripts/script.sql", true);
+			PrintWriter out = new PrintWriter(fw)) {
+			out.println(sqlStatement);
+		} catch (IOException e) {
+			System.out.println("EXCEPTION + " + e.getMessage());
+		}
+	}
+
+	public void insertPreference(preferenceModel pref) {
+		String insertSql = "INSERT INTO Preferences (PreferencesID, PreferredGender, PreferredAgeRange, PreferredLifestyle, PreferredLocation) VALUES (?, ?, ?, ?, ?)";
+		try (PreparedStatement ps = connection.prepareStatement(insertSql)) {
+			ps.setString(1, pref.getPreferencesID());
+			ps.setString(2, pref.getGender());
+			ps.setString(3, pref.getAgeRange());
+			ps.setString(4, pref.getLifeStyle());
+			ps.setString(5, pref.getLocation());
+			ps.executeUpdate();
+			appendPreference(pref);
+			System.out.println(getResIds());
+		} catch (SQLException e) {
+			System.out.println("[EXCEPTION] " + e.getMessage());
+		}
+	}
+
+	private void appendPreference(preferenceModel pref) {
+		String sqlStatement = String.format("INSERT INTO Preferences VALUES ('%s', '%s', '%s', '%s', '%s');\n",
+				pref.getPreferencesID(), pref.getGender(), pref.getAgeRange(), pref.getLifeStyle(), pref.getLocation());
+		try(FileWriter fw = new FileWriter("src/scripts/script.sql", true);
+			PrintWriter out = new PrintWriter(fw)) {
+			out.println(sqlStatement);
+		} catch (IOException e) {
+			System.out.println("EXCEPTION + " + e.getMessage());
+		}
+	}
+
+	public void insertRequirement(requirementModel req) {
+		String insertSql = "INSERT INTO Requirements (RequirementID, RequiredGender, RequiredAgeRange, RequiredLifestyle, RequiredLocation) VALUES (?, ?, ?, ?, ?)";
+		try (PreparedStatement ps = connection.prepareStatement(insertSql)) {
+			ps.setString(1, req.getRequirementID());
+			ps.setString(2, req.getGender());
+			ps.setString(3, req.getAgeRange());
+			ps.setString(4, req.getLifeStyle());
+			ps.setString(5, req.getLocation());
+			ps.executeUpdate();
+			appendRequirement(req);
+			System.out.println(getResIds());
+		} catch (SQLException e) {
+			System.out.println("[EXCEPTION] " + e.getMessage());
+		}
+	}
+
+	private void appendRequirement(requirementModel req) {
+		String sqlStatement = String.format("INSERT INTO Requirements VALUES ('%s', '%s', '%s', '%s', '%s');\n",
+				req.getRequirementID(), req.getGender(), req.getAgeRange(), req.getLifeStyle(), req.getLocation());
+		try(FileWriter fw = new FileWriter("src/scripts/script.sql", true);
+			PrintWriter out = new PrintWriter(fw)) {
+			out.println(sqlStatement);
+		} catch (IOException e) {
+			System.out.println("EXCEPTION + " + e.getMessage());
+		}
+	}
+
+	public void insertSocial(socialModel social) {
+		String insertSql = "INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES (?, ?, ?, ?)";
+		try (PreparedStatement ps = connection.prepareStatement(insertSql)) {
+			ps.setString(1, social.getEmailID());
+			ps.setString(2, social.getUserID());
+			ps.setString(3, social.getPhone());
+			ps.setString(4, social.getInstaID());
+			ps.executeUpdate();
+			appendSocial(social);
+			System.out.println(getResIds());
+		} catch (SQLException e) {
+			System.out.println("[EXCEPTION] " + e.getMessage());
+		}
+	}
+
+	private void appendSocial(socialModel social) {
+		String sqlStatement = String.format("INSERT INTO SocialPageHas VALUES ('%s', '%s', '%s', '%s');\n",
+				social.getEmailID(), social.getUserID(), social.getPhone(), social.getInstaID());
 		try(FileWriter fw = new FileWriter("src/scripts/script.sql", true);
 			PrintWriter out = new PrintWriter(fw)) {
 			out.println(sqlStatement);
