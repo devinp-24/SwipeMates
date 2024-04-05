@@ -16,7 +16,6 @@ public class UserPreferencesPage extends JFrame {
     private String username;
     private JComboBox<String> ageRangeComboBox, locationComboBox, genderComboBox, lifestyleComboBox;
     private JComboBox<String> agePreferenceComboBox, locationPreferenceComboBox, genderPreferenceComboBox, lifestylePreferenceComboBox;
-    // Socials
     private JTextField emailField, phoneNumberField, instaHandleField;
     private JButton submitButton;
 
@@ -178,6 +177,8 @@ public class UserPreferencesPage extends JFrame {
 
                 socialModel social = new socialModel(email, username, phoneNumber, instaHandle);
                 delegate.insertSocial(social);
+
+                delegate.onSubmitSuccess(username);
             }
         });
         socialsPanel.add(submitButton, gbc);

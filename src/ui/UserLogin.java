@@ -81,6 +81,7 @@ public class UserLogin extends JFrame {
                 System.out.println(username);
                 if (delegate.checkUserId(username)) {
                     System.out.println("Exists");
+                    delegate.onLoginSuccess(username);
                 } else {
                     System.out.println("Not Exists");
                 }

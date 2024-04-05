@@ -1,20 +1,24 @@
 package controller;
 
 import database.DatabaseConnectionHandler;
+import delegates.DashBoardDelegate;
 import delegates.LoginWindowDelegate;
 import delegates.UserLoginDelegate;
 import delegates.UserPreferencesDelegate;
 import model.*;
+import ui.Dashboard;
 import ui.LoginWindow;
 import ui.UserLogin;
 import ui.UserPreferencesPage;
 
 import java.util.List;
 
-public class Main implements LoginWindowDelegate, UserLoginDelegate, UserPreferencesDelegate {
+public class Main implements LoginWindowDelegate, UserLoginDelegate, UserPreferencesDelegate, DashBoardDelegate {
     private DatabaseConnectionHandler dbHandler = null;
     private LoginWindow loginWindow = null;
     private UserLogin userLogin = null;
+    private UserPreferencesPage userPreferencesPage;
+    private Dashboard dashboard = null;
 
 
 
@@ -79,8 +83,15 @@ public class Main implements LoginWindowDelegate, UserLoginDelegate, UserPrefere
     @Override
     public void onSignUpSuccess(String username) {
         userLogin.dispose();
-        UserPreferencesPage userPreferencesPage = new UserPreferencesPage();
+        userPreferencesPage = new UserPreferencesPage();
         userPreferencesPage.showFrame(this, username);
+    }
+
+    @Override
+    public void onLoginSuccess(String username) {
+        userLogin.dispose();
+        dashboard = new Dashboard();
+        dashboard.showFrame(this, username);
     }
 
     @Override
@@ -96,5 +107,23 @@ public class Main implements LoginWindowDelegate, UserLoginDelegate, UserPrefere
     @Override
     public void insertSocial(socialModel social) {
         dbHandler.insertSocial(social);
+    }
+
+    @Override
+    public void onSubmitSuccess(String username) {
+        userPreferencesPage.dispose();
+        dashboard = new Dashboard();
+        dashboard.showFrame(this, username);
+    }
+
+
+    @Override
+    public void deleteUser(String userID) {
+
+    }
+
+    @Override
+    public void updateSocialPageHas(String userID, String newEmailID, String newPhoneNumber, String newInstagramUsername) {
+        dbHandler.updateSocialPageHas(userID, newEmailID, newPhoneNumber, newInstagramUsername);
     }
 }

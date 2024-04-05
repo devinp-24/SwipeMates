@@ -13,4 +13,5 @@ public interface UserLoginDelegate {
     void insertLister(listerModel lister);
     void insertSeeker(seekerModel seeker);
     void onSignUpSuccess(String username);
+    void onLoginSuccess(String username);
 }
