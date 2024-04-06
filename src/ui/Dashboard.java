@@ -17,18 +17,15 @@ public class Dashboard extends JFrame {
 
     public Dashboard() {
         super("Dashboard");
-        initializeComponents();
     }
 
     private void initializeComponents() {
-        // Setting up the layout for the right panel where content will be switched
         rightPanel = new JPanel(cardLayout);
         rightPanel.setBackground(Color.WHITE);
 
-        // Setting up the left panel with buttons
         leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-        leftPanel.setBackground(new Color(220, 220, 220)); // A light grey color
+        leftPanel.setBackground(new Color(220, 220, 220));
 
         String[] buttonLabels = {
                 "Update", "Delete", "Selection", "Projection", "Join",
@@ -46,19 +43,17 @@ public class Dashboard extends JFrame {
             leftPanel.add(button);
         }
 
-        // Initialize panels for each button
         initializePanelsForButtons(buttonLabels);
 
-        // Creating and setting up the split pane
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, new JScrollPane(rightPanel));
-        splitPane.setDividerLocation(150); // You can adjust this value to suit your layout
+        splitPane.setDividerLocation(150);
         splitPane.setDividerSize(5);
 
         getContentPane().add(splitPane);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(800, 600); // Adjust the size as needed
-        setLocationRelativeTo(null); // Center the window
+        setSize(800, 600);
+        setLocationRelativeTo(null);
     }
 
     private void initializePanelsForButtons(String[] buttonLabels) {
@@ -68,8 +63,21 @@ public class Dashboard extends JFrame {
                 panel = createUpdatePanel();
             } else if ("Delete".equals(label)) {
                 panel = createDeletePanel();
-            }
-            else {
+            } else if ("Selection".equals(label)) {
+                panel = new SelectionPanel(delegate);
+            } else if ("Join".equals(label)) {
+                panel = new JoinPanel(delegate);
+            } else if ("Group By".equals(label)) {
+                panel = new GroupByPanel(delegate);
+            } else if ("Group By Having".equals(label)) {
+                panel = new GrpByAggPanel(delegate);
+            } else if ("Group By Nested".equals(label)) {
+                panel = new NestedGrpPanel(delegate);
+            } else if ("Division".equals(label)) {
+                panel = new DivisionPanel(delegate);
+            } else if ("Projection".equals(label)) {
+                panel = new ProjectionPanel(delegate);
+            } else {
                 panel = new JPanel();
                 panel.add(new JLabel(label + " Content"));
             }
@@ -132,13 +140,11 @@ public class Dashboard extends JFrame {
         JPanel deletePanel = new JPanel();
         deletePanel.setLayout(new BoxLayout(deletePanel, BoxLayout.Y_AXIS));
 
-        // Adding a label with a warning message
         JLabel warningLabel = new JLabel("<html>Delete Account: This will permanently delete your account including socials, preferences, and requirements.</html>");
-        warningLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align the label
+        warningLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Adding a button that will trigger the account deletion
         JButton deleteButton = new JButton("Delete User Account");
-        deleteButton.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align the button
+        deleteButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -156,9 +162,9 @@ public class Dashboard extends JFrame {
             }
         });
 
-        deletePanel.add(Box.createRigidArea(new Dimension(0, 50))); // Spacer for aesthetics
+        deletePanel.add(Box.createRigidArea(new Dimension(0, 50)));
         deletePanel.add(warningLabel);
-        deletePanel.add(Box.createRigidArea(new Dimension(0, 20))); // Spacer between label and button
+        deletePanel.add(Box.createRigidArea(new Dimension(0, 20)));
         deletePanel.add(deleteButton);
 
         return deletePanel;
@@ -168,6 +174,7 @@ public class Dashboard extends JFrame {
     public void showFrame(DashBoardDelegate delegate, String username) {
         this.delegate = delegate;
         this.username = username;
+        initializeComponents();
         setVisible(true);
     }
 }
