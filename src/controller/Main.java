@@ -39,7 +39,6 @@ public class Main implements LoginWindowDelegate, UserLoginDelegate, UserPrefere
         boolean didConnect = dbHandler.login(username, password);
 
         if (didConnect) {
-            // Once connected, remove login window and start text transaction flow
             loginWindow.dispose();
             userLogin.showFrame(this);
 
@@ -125,5 +124,40 @@ public class Main implements LoginWindowDelegate, UserLoginDelegate, UserPrefere
     @Override
     public void updateSocialPageHas(String userID, String newEmailID, String newPhoneNumber, String newInstagramUsername) {
         dbHandler.updateSocialPageHas(userID, newEmailID, newPhoneNumber, newInstagramUsername);
+    }
+
+    @Override
+    public List<List<Object>> queryResidences(String whereClause) {
+        return dbHandler.queryResidences(whereClause);
+    }
+
+    @Override
+    public List<List<Object>> join() {
+        return dbHandler.join();
+    }
+
+    @Override
+    public List<List<Object>> aggGroupBy() {
+        return dbHandler.aggGroupBy();
+    }
+
+    @Override
+    public List<List<Object>> aggHavingWithJoin() {
+        return dbHandler.aggHavingWithJoin();
+    }
+
+    @Override
+    public List<List<Object>> nestedAggGroupBy() {
+        return dbHandler.nestedAggGroupBy();
+    }
+
+    @Override
+    public List<List<Object>> performDivisionQuery() {
+        return dbHandler.performDivisionQuery();
+    }
+
+    @Override
+    public List<List<Object>> projectUser(String query) {
+        return dbHandler.projectUser(query);
     }
 }
