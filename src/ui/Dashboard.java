@@ -148,17 +148,8 @@ public class Dashboard extends JFrame {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int response = JOptionPane.showConfirmDialog(
-                        null,
-                        "Are you sure you want to permanently delete your account?",
-                        "Confirm Deletion",
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE
-                );
-                if (response == JOptionPane.YES_OPTION) {
-                    delegate.deleteUser(username);
-                    System.exit(-1);
-                }
+                delegate.deleteUser(username);
+                System.exit(-1);
             }
         });
 
