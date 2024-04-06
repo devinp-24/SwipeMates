@@ -1,3 +1,4 @@
+// FOLLOWS THE STRUCTURE AND FORMAT OF BANK PROJECT FROM https://www.students.cs.ubc.ca/~cs-304/resources/jdbc-oracle-resources/jdbc-java-setup.html
 package controller;
 
 import database.DatabaseConnectionHandler;
