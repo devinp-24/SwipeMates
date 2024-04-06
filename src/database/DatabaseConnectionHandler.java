@@ -18,7 +18,6 @@ public class DatabaseConnectionHandler {
 			Class.forName(JDBC_DRIVER);
 			connection = DriverManager.getConnection(ORACLE_URL, username, password);
 			databaseSetup();
-			// printUsersTable();
 
 			System.out.println("Login and setup done.");
 			return true;
@@ -44,7 +43,7 @@ public class DatabaseConnectionHandler {
 	}
 
 	public void databaseSetup() {
-		try (InputStream is = getClass().getResourceAsStream("/scripts/script.sql");  // Corrected path
+		try (InputStream is = getClass().getResourceAsStream("/scripts/script.sql");
 			 BufferedReader reader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 			 Statement stmt = connection.createStatement()) {
 
@@ -61,11 +60,11 @@ public class DatabaseConnectionHandler {
 							if (e.getErrorCode() == 942) {
 								System.out.println("Table does not exist, no need to drop");
 							} else {
-								throw e;  // Rethrow for other SQL errors
+								throw e;
 							}
 						}
 					}
-					sb.setLength(0);  // Reset StringBuilder for next SQL command
+					sb.setLength(0);
 				}
 			}
 		} catch (SQLException e) {
@@ -83,13 +82,11 @@ public class DatabaseConnectionHandler {
 			ResultSetMetaData rsmd = rs.getMetaData();
 			int columnsNumber = rsmd.getColumnCount();
 
-			// Print column headers
 			for (int i = 1; i <= columnsNumber; i++) {
 				System.out.print(String.format("%-30s", rsmd.getColumnName(i)));
 			}
 			System.out.println();
 
-			// Print rows
 			while (rs.next()) {
 				for (int i = 1; i <= columnsNumber; i++) {
 					String columnValue = rs.getString(i);
@@ -397,4 +394,189 @@ public class DatabaseConnectionHandler {
 			System.out.println("EXCEPTION: " + e.getMessage());
 		}
 	}
+
+	public List<List<Object>> queryResidences(String whereClause) {
+		List<List<Object>> resultList = new ArrayList<>();
+		String query = whereClause;
+		System.out.println(query);
+
+		try (PreparedStatement ps = connection.prepareStatement(query);
+			 ResultSet rs = ps.executeQuery()) {
+
+			ResultSetMetaData metaData = rs.getMetaData();
+			int columnCount = metaData.getColumnCount();
+
+			while (rs.next()) {
+				List<Object> row = new ArrayList<>();
+				for (int i = 1; i <= columnCount; i++) {
+					row.add(rs.getObject(i));
+				}
+				resultList.add(row);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Query failed due to a SQL error.");
+		}
+
+		return resultList;
+	}
+
+	public List<List<Object>> join() {
+		List<List<Object>> resultList = new ArrayList<>();
+		String joinQuery = "SELECT * FROM Users U, Preferences P, Requirements R WHERE U.UserID = P.PreferencesID AND U.UserID = R.RequirementID";
+
+		try (PreparedStatement ps = connection.prepareStatement(joinQuery);
+			 ResultSet rs = ps.executeQuery()) {
+
+			ResultSetMetaData metaData = rs.getMetaData();
+			int columnCount = metaData.getColumnCount();
+
+			while (rs.next()) {
+				List<Object> row = new ArrayList<>();
+				for (int i = 1; i <= columnCount; i++) {
+					row.add(rs.getObject(i));
+				}
+				resultList.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Join query failed due to a SQL error.");
+		}
+
+		return resultList;
+	}
+
+	public List<List<Object>> projectUser(String query) {
+		List<List<Object>> resultList = new ArrayList<>();
+		System.out.println(query);
+		try (Statement stmt = connection.createStatement();
+			 ResultSet rs = stmt.executeQuery(query)) {
+
+			ResultSetMetaData metaData = rs.getMetaData();
+			int columnCount = metaData.getColumnCount();
+
+			while (rs.next()) {
+				List<Object> row = new ArrayList<>();
+				for (int i = 1; i <= columnCount; i++) {
+					row.add(rs.getObject(i));
+				}
+				resultList.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return resultList;
+	}
+
+	public List<List<Object>> aggGroupBy() {
+		List<List<Object>> resultList = new ArrayList<>();
+		String aggQuery = "SELECT Type, AVG(Rent) as AverageRent FROM Res GROUP BY Type";
+
+		try (PreparedStatement ps = connection.prepareStatement(aggQuery);
+			 ResultSet rs = ps.executeQuery()) {
+
+			ResultSetMetaData metaData = rs.getMetaData();
+			int columnCount = metaData.getColumnCount();
+
+			while (rs.next()) {
+				List<Object> row = new ArrayList<>();
+				for (int i = 1; i <= columnCount; i++) {
+					row.add(rs.getObject(i));
+				}
+				resultList.add(row);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Aggregation with GROUP BY query failed due to a SQL error.");
+		}
+
+		return resultList;
+	}
+
+	public List<List<Object>> aggHavingWithJoin() {
+		List<List<Object>> resultList = new ArrayList<>();
+		int minAvgRent = 1000;
+
+		String aggQuery = "SELECT B.BuildingName, AVG(R.Rent) as AvgRent FROM Floors F, Building B,Res R WHERE F.BUILDINGNAME = B.BuildingName and B.Address = R.Address GROUP BY B.BuildingName HAVING AVG(R.Rent) > ?";
+
+		try (PreparedStatement ps = connection.prepareStatement(aggQuery)) {
+			ps.setInt(1, minAvgRent);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				ResultSetMetaData metaData = rs.getMetaData();
+				int columnCount = metaData.getColumnCount();
+
+				while (rs.next()) {
+					List<Object> row = new ArrayList<>();
+					for (int i = 1; i <= columnCount; i++) {
+						row.add(rs.getObject(i));
+					}
+					resultList.add(row);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Aggregation with HAVING clause query failed due to a SQL error.");
+		}
+
+		return resultList;
+	}
+	public List<List<Object>> nestedAggGroupBy() {
+		List<List<Object>> resultList = new ArrayList<>();
+		int minAvgRent = 1200;
+
+		String nestedAggQuery =
+				"SELECT F.BuildingName, AVG(R.NumberOfRooms) AS AvgNumberOfRooms FROM Floors F, Building B, Res R WHERE F.BuildingName = B.BuildingName AND B.Address = R.Address GROUP BY F.BuildingName HAVING AVG(R.Rent) > (SELECT AVG(Rent) FROM Res WHERE Address IN (SELECT Address FROM Building) AND Rent > ?)";
+
+		try (PreparedStatement ps = connection.prepareStatement(nestedAggQuery)) {
+			ps.setInt(1, minAvgRent);
+
+			try (ResultSet rs = ps.executeQuery()) {
+				ResultSetMetaData metaData = rs.getMetaData();
+				int columnCount = metaData.getColumnCount();
+
+				while (rs.next()) {
+					List<Object> row = new ArrayList<>();
+					for (int i = 1; i <= columnCount; i++) {
+						row.add(rs.getObject(i));
+					}
+					resultList.add(row);
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Nested aggregation with GROUP BY query failed due to a SQL error.");
+		}
+
+		return resultList;
+	}
+	public List<List<Object>> performDivisionQuery() {
+		List<List<Object>> results = new ArrayList<>();
+		String divisionQuery =
+				"SELECT U.UserID, U.Name " +
+						"FROM Users U " +
+						"WHERE NOT EXISTS ( " +
+						"(SELECT DISTINCT Type FROM Res) " +
+						"MINUS " +
+						"(SELECT DISTINCT L.ListingType FROM Lister L WHERE L.ListerID = U.UserID)" +
+						")";
+
+		try (PreparedStatement ps = connection.prepareStatement(divisionQuery)) {
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				List<Object> row = new ArrayList<>();
+				row.add(rs.getString("UserID"));
+				row.add(rs.getString("Name"));
+				results.add(row);
+			}
+		} catch (SQLException e) {
+			System.err.println("SQL Exception: " + e.getMessage());
+		}
+
+		return results;
+	}
+
+
 }
