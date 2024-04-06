@@ -44,7 +44,7 @@ public class UserLogin extends JFrame {
         addSignupSection();
 
         this.pack();
-        this.setLocationRelativeTo(null); // Center on screen
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
@@ -131,7 +131,6 @@ public class UserLogin extends JFrame {
         listerPanel.add(new JLabel("Residence: "));
         listerPanel.add(residenceComboBox);
 
-// Add more components specific to Lister
         cards.add(seekerPanel, "Seeker");
         cards.add(listerPanel, "Lister");
         signupPanel.add(new JLabel("User Type: "), gbc);
@@ -167,7 +166,7 @@ public class UserLogin extends JFrame {
                     age = Integer.parseInt(ageText);
                 } catch (Exception err) {
                     JOptionPane.showMessageDialog(ageField, "Please enter a valid integer for age.", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-                    ageField.requestFocus(); // Optionally, request focus back to the ageField for correction
+                    ageField.requestFocus();
                 }
                 String gender = (String) genderComboBox.getSelectedItem();
                 String bio = bioText.getText();
