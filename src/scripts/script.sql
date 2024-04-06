@@ -4,6 +4,11 @@ DROP TABLE Preferences;
 DROP TABLE Requirements;
 DROP TABLE SocialPageHas;
 DROP TABLE Users;
+DROP TABLE Res;
+DROP TABLE Building;
+DROP TABLE Floors;
+
+-- FOR THE FIRST TIME DONT RUN THE DROP TABLE COMMANDS, AFTER THAN THE ENTIRE FILE CAN BE RUN ANY NUMBER OF TIMES.
 CREATE TABLE Users (
                        UserID VARCHAR(16) PRIMARY KEY,
                        Name VARCHAR(255) NOT NULL,
@@ -131,9 +136,7 @@ INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALU
 INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('ethan.wong@gmail.com', 'S987321', '7780000019', 'ethanwongubc');
 INSERT INTO SocialPageHas (EmailID, UserID, PhoneNumber, InstagramUsername) VALUES ('sophia.loren@gmail.com', 'S159753', '7780000020', 'sophialorenubc');
 
-DROP TABLE Res;
-DROP TABLE Building;
-DROP TABLE Floors;
+
 CREATE TABLE Floors (
                         BuildingName VARCHAR(255) PRIMARY KEY,
                         NumberOfFloors INT NOT NULL
